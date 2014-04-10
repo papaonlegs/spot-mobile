@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title></title>
+    <link href="css/sonar.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #3851bc;
+            margin: 100px auto;
+            /*text-align: center;*/ /* do not use text align that will make sonar element lose location*/
+            width: 100px;
+        }
+
+    </style>
+</head>
+<body>
+
+
+
+    <img class="icon" src="img/spots.jpg">
+
+    <script src="js/jquery.js"></script>
+    <script src="js/sonar.js"></script>
+    <br><br>
+    <button id="stop">Stop</button>
+    <script>
+        $('.icon').sonar();
+        $('.icon').on('click',
+            function(){
+                sonar = setInterval(function(){
+                    $('.icon').mouseenter();
+                }, 500);
+            }
+        );
+        $('#stop').on(
+            'click',
+            function(){
+                clearInterval(sonar);
+            });
+    </script>
+</body>
+</html>

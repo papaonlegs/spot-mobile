@@ -1,0 +1,61 @@
+.icon {
+    opacity: 0.9;
+    cursor: pointer;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+}
+
+.icon:hover{
+    -webkit-transform: scale(0.8);
+    -moz-transform: scale(0.8);
+    -ms-transform: scale(0.8);
+    transform: scale(0.8);
+    opacity: 0.7;
+    -webkit-transition: -webkit-transform 0.2s, opacity 0.2s;
+    -moz-transition: -moz-transform 0.2s, opacity 0.2s;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+@-webkit-keyframes sonarEffect {
+    0% {
+        opacity: 0.3;
+    }
+    40% {
+        opacity: 0.5;
+        box-shadow: 0 0 0 2px rgba(255,255,255,0.1), 0 0 20px 20px #3851bc, 0 0 0 20px rgba(255,255,255,0.5);
+    }
+    100% {
+        box-shadow: 0 0 0 2px rgba(255,255,255,0.1), 0 0 20px 20px #3851bc, 0 0 0 20px rgba(255,255,255,0.5);
+        -webkit-transform: scale(1.2);
+        opacity: 0;
+    }
+}
+@-moz-keyframes sonarEffect {
+    0% {
+        opacity: 0.3;
+    }
+    40% {
+        opacity: 0.5;
+        box-shadow: 0 0 0 2px rgba(255,255,255,0.1), 0 0 20px 20px #3851bc, 0 0 0 20px rgba(255,255,255,0.5);
+    }
+    100% {
+        box-shadow: 0 0 0 2px rgba(255,255,255,0.1), 0 0 20px 20px #3851bc, 0 0 0 20px rgba(255,255,255,0.5);
+        -moz-transform: scale(1.2);
+        opacity: 0;
+    }
+}
+@keyframes sonarEffect {
+    0% {
+        opacity: 0.3;
+    }
+    40% {
+        opacity: 0.5;
+        box-shadow: 0 0 0 2px rgba(255,255,255,0.1), 0 0 20px 20px #3851bc, 0 0 0 20px rgba(255,255,255,0.5);
+    }
+    100% {
+        box-shadow: 0 0 0 2px rgba(255,255,255,0.1), 0 0 20px 20px #3851bc, 0 0 0 20px rgba(255,255,255,0.5);
+        transform: scale(1.2);
+        opacity: 0;
+    }
+}

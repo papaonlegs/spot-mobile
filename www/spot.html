@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet" href="css/jquery.mobile.min.css">
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/jquery.mobile.js"></script>
+        <script type="text/javascript" src="js/jquery.tmpl.js"></script>
+        <script type="text/javascript" src="js/global.js"></script>
+        <script id="spotTemplate" type="text/x-jquery-tmpl">
+        <ul data-role="listview" id="results" data-inset="true">
+        <p>
+        <h1> ${name} </h1>
+        LAT: ${lat}<br>
+        LON: ${lon}<br>
+        <br><br>
+        FOODS
+        <ul data-role="listview" id="results" data-inset="true">
+        {{each(i) foods}}
+        <li id="${id}" class="spot"><a>
+            <img src="img/logo.png"/>
+            <h3>${foods[i].name}</h3>
+            <p>${foods[i].description}</p>
+        </a></li>
+        {{/each}}
+        </ul>
+        </p>
+        </script>
+        <title>Hello World</title>
+        <script>
+        $(function(){
+            spot = localStorage.getObject('spot');
+            console.log(spot);
+            // $('#spotTemplate').tmpl(spot).appendTo('#pageone').trigger("create");
+            }
+        );
+        </script>
+    </head>
+    <body>
+        <div data-role="page" id="page1">
+          <div data-role="header">
+            <h1>AD PERHAPS</h1>
+          </div>
+
+          <div data-role="main" class="ui-content">
+        <p>
+        <h1> ${name} </h1>
+        LAT: ${lat}<br>
+        LON: ${lon}<br>
+        <br><br>
+        FOODS
+
+        {{each(i) foods}}
+            <hr>
+            name: ${foods[i].name}
+            description: name: ${foods[i].description}
+        {{/each}}
+        </p>
+        </div>
+
+          <div data-role="footer">
+            <h1>SPOTS LTD</h1>
+          </div>
+          
+        </div>
+        <script>
+            $('[data-role=page]').on('pageshow', function(event) {
+                spot = localStorage.getObject('spot');
+                $('.ui-content').replaceWith($('#spotTemplate').tmpl(spot));
+                $(document).trigger('create');
+                $('.ui-content ul').listview('refresh');
+              });
+        </script>
+        
+    </body>
+</html>

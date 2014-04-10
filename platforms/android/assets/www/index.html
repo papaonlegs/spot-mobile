@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet" href="css/jquery.mobile.min.css">
+        <link rel="stylesheet" href="css/sonar.css">
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/jquery.mobile.js"></script>
+        <script type="text/javascript" src="js/jquery.tmpl.js"></script>
+        <script type="text/javascript" src="js/global.js"></script>
+        <script src="js/sonar.js"></script>
+        <title>Hello World</title>
+        <script id="foodTemplate" type="text/x-jquery-tmpl">
+        <li id="${id}" class="spot"><a>
+            <img src="img/logo.png"/>
+            <h3>${name}</h3>
+            <p>${description}</p>
+        </a></li>
+        </script>
+        <script>
+        $(function(){
+
+            // $('.icon').sonar();
+            // $('.icon').on('click',
+            //     function(){
+            //         sonar = setInterval(function(){
+            //             $('.icon').mouseenter();
+            //         }, 2500);
+            //     }
+            // );
+            // $('#stop').on(
+            //     'click',
+            //     function(){
+            //         clearInterval(sonar);
+            //     });
+
+            $('.icon').sonar();
+            $('#clickable').on('click',
+                function(){
+                    sonar = setInterval(function(){
+                        $('.icon').mouseenter();
+                    }, 2500);
+                }
+            );
+            $('#stop').on(
+                'click',
+                function(){
+                    clearInterval(sonar);
+                }
+            );
+
+            function transformData(data){
+                for(var i=0; i < data.spots.length; i++){
+                    setData('spot-'+data.spots[i].id, data.spots[i]);
+                    $('#foodTemplate').tmpl(data.spots[i]).appendTo('#results');
+                    $('#cGroup ul').listview('refresh');
+                }
+            };
+
+            function showLoading(show) {
+              if (show){
+                  var $this = $( this ),
+                  theme = $this.jqmData( "theme" ) || $.mobile.loader.prototype.options.theme,
+                  msgText = $this.jqmData( "msgtext" ) || $.mobile.loader.prototype.options.text,
+                  textVisible = $this.jqmData( "textvisible" ) || $.mobile.loader.prototype.options.textVisible,
+                  textonly = !!$this.jqmData( "textonly" );
+                  html = $this.jqmData( "html" ) || "";
+                $.mobile.loading( 'show', {
+                  text: msgText,
+                  textVisible: textVisible,
+                  theme: theme,
+                  textonly: textonly,
+                  html: html
+                  });
+              }else{
+                $.mobile.loading( "hide" );
+              }
+            }
+
+            $('#pulsate').on(
+                'click',
+                function(){
+                    console.log("clicked");
+                    $('.ui-content').trigger('mousedown');
+                }
+            );
+
+            $('#cGroup').on(
+                'click',
+                '.spot',
+                function(){
+                    spotDetails = localStorage.getObject('spot-'+$(this).attr('id'));//getItem("spot", $(this).attr('id'));
+
+                    console.log($(this).attr('id'));
+                    localStorage.setObject('spot', spotDetails);
+                    console.log(localStorage.getObject('spot'));
+                    window.location.href = "spot.html";
+                }
+            );
+
+            $('#cGroup').on(
+                'click',
+                '#search',
+                function(){
+                    showLoading(true);
+                    $.getJSON(
+                        "http://secret-ocean-2820.herokuapp.com/search",
+                        {name: $('#name').val()},
+                        function(data, status) {
+                            if (status == "success") {
+                                console.log(data);
+                                transformData(data);
+                                // $('#results').append(htmlData);
+                                showLoading(false)
+                            } else {
+                                $('#results').append('No results mate');
+                                console.log("nada");
+                            }
+                        }
+                    );
+                }
+            );
+        });
+        </script>
+    </head>
+    <body>
+        <!-- <div class="app">
+            <h1>PhoneGap</h1>
+            <div id="deviceready" class="blink">
+                <p class="event listening">Connecting to Device</p>
+                <p class="event received">Device is Ready</p>
+            </div>
+        </div> -->
+        <div data-role="page" id="page1" style="background-color: #3851bc;">
+            <!-- <div role="main" class="ui-content" style="background-color: #3851bc;"> -->
+            <div id="clickable">
+                <img class="icon" src="img/spots.jpg">
+                <button id="stop">stop</button>
+            </div>
+            <!-- </div> -->
+        </div>
+        <div data-role="page" id="page2">
+          <div role="main" class="ui-content">
+            <div data-role="controlgroup" id="cGroup">
+              <input type="text" id="name" name="name"/>
+              <button class="show-page-loading-msg" data-theme="b" data-textonly="false" data-textvisible="false" data-msgtext="" data-icon="search" data-iconpos="right" id="search">Search</button>
+              <ul data-role="listview" id="results" data-inset="true">
+                <li id="1" class="spot"><a>
+                    <img src="img/logo.png"/>
+                    <h3>placeholder</h3>
+                    <p> And my description ... </p>
+                </a></li>
+
+              </ul>
+            </div>
+          </div>
+        </div>
+        <input type="text" id="name" name="name"/>
+        <input type="button" id="search" value="search">
+        <button id="show">Show</button>
+        <button id="hide">Hide</button>
+        <div id="results"></div>
+    </body>
+</html>
